@@ -3,23 +3,34 @@ import requests
 class API:
     BASE_URL = 'https://uts-ws.nlm.nih.gov/rest'
 
-    def __init__(self, *, api_key, version='current'):
+    def __init__(self, api_key, version, **kwargs):
         self._api_key = api_key
         self._version = version
+        self.params = {'apiKey': self._api_key, **kwargs}
 
     def get_cui(self, cui):
         url = f'{self.BASE_URL}/content/{self._version}/CUI/{cui}'
-        return self._get(url=url)
+        return self._get(url=url, params=self.params)
 
     def get_tui(self, tui):
         url = (f'{self.BASE_URL}/semantic-network/{self._version}/TUI/{tui}')
-        return self._get(url=url)
+        return self._get(url=url, params=self.params)
 
-    def get_definition(self, cui):
+    def get_definitions(self, cui, **kwargs):
         url = f'{self.BASE_URL}/content/{self._version}/CUI/{cui}/definitions'
-        return self._get(url=url)
+        params = {**kwargs, **self.params}
+        return self._get(url=url, params=params)
 
-    def _get(self, url):
-        resp = requests.get(url, params={'apiKey': self._api_key})
-        
+    def get_cui_relations(self, cui, **kwargs):
+        url = f'{self.BASE_URL}/content/{self._version}/CUI/{cui}/relations'
+        params = {**kwargs, **self.params}
+        return self._get(url=url, params=params)
+
+    def get_cui_atoms(self, cui, **kwargs):
+        url = f'{self.BASE_URL}/content/{self._version}/CUI/{cui}/atoms'
+        params = {**kwargs, **self.params}
+        return self._get(url=url, params=params)
+
+    def _get(self, url, params):
+        resp = requests.get(url, params=params)
         return resp.json()
