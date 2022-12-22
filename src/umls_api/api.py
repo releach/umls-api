@@ -21,6 +21,11 @@ class API:
         params = {**kwargs, **self.params}
         return self._get(url=url, params=params)
 
+    def get_codes(self, code, source, **kwargs):
+        url = f'{self.BASE_URL}/content/{self._version}/source/{source}/{code}'
+        params = {**kwargs, **self.params}
+        return self._get(url=url, params=params)
+
     def get_cui_relations(self, cui, **kwargs):
         url = f'{self.BASE_URL}/content/{self._version}/CUI/{cui}/relations'
         params = {**kwargs, **self.params}
