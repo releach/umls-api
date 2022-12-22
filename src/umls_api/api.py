@@ -34,3 +34,7 @@ class API:
     def _get(self, url, params):
         resp = requests.get(url, params=params)
         return resp.json()
+
+    def list_cui_names(self, resp):
+        for value in resp['result']:
+            print(value['name'])
